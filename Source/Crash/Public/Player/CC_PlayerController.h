@@ -5,6 +5,7 @@
 #include "CC_PlayerController.generated.h"
 
 
+struct FGameplayTag;
 struct FInputActionValue;
 class UInputAction;
 class UInputMappingContext;
@@ -45,7 +46,18 @@ private:
     UPROPERTY(EditDefaultsOnly, Category = "Crash|Input|Abilities")
     TObjectPtr<UInputAction> PrimaryAction;
 
+    UPROPERTY(EditDefaultsOnly, Category = "Crash|Input|Abilities")
+    TObjectPtr<UInputAction> SecondaryAction;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Crash|Input|Abilities")
+    TObjectPtr<UInputAction> TertiaryAction;
+
+
     void Primary();
+    void Secondary();
+    void Tertiary();
+
+    void ActivateAbility(const FGameplayTag& AbilityTag) const;
 
 #pragma endregion
 

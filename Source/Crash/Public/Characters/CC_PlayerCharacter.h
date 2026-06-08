@@ -15,6 +15,11 @@ class CRASH_API ACC_PlayerCharacter : public ACC_BaseCharacter
 public:
     ACC_PlayerCharacter();
 
+    virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+    virtual void PossessedBy(AController* NewController) override;
+
+    virtual void OnRep_PlayerState() override;
 
 private:
     UPROPERTY(VisibleAnywhere, Category = "Camera", meta = (AllowPrivateAccess = true))

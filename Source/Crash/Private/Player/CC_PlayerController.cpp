@@ -1,9 +1,12 @@
 ﻿#include "Crash/Public/Player/CC_PlayerController.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
 #include "GameFramework/Character.h"
+#include "GameplayTags/CCTags.h"
 
 void ACC_PlayerController::SetupInputComponent()
 {
@@ -24,7 +27,10 @@ void ACC_PlayerController::SetupInputComponent()
     EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ThisClass::StopJumping);
     EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Move);
     EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
-    EnhancedInputComponent->BindAction(PrimaryAction, ETriggerEvent::Started, this, &ThisClass::Primary);
+
+    EnhancedInputComponent->BindAction(PrimaryAction, ETriggerEvent::Triggered, this, &ThisClass::Primary);
+    EnhancedInputComponent->BindAction(SecondaryAction, ETriggerEvent::Started, this, &ThisClass::Secondary);
+    EnhancedInputComponent->BindAction(TertiaryAction, ETriggerEvent::Started, this, &ThisClass::Tertiary);
 }
 
 void ACC_PlayerController::Jump()
@@ -67,5 +73,26 @@ void ACC_PlayerController::Look(const FInputActionValue& Value)
 
 void ACC_PlayerController::Primary()
 {
-    UE_LOG(LogTemp, Warning, TEXT("Primary Action!"));
+    ActivateAbility(CCTags::CCAbilities::Primary);
+}
+
+void ACC_PlayerController::Secondary()
+{
+    ActivateAbility(CCTags::CCAbilities::Secondary);
+}
+
+void ACC_PlayerController::Tertiary()
+{
+    ActivateAbility(CCTags::CCAbilities::Tertiary);
+}
+
+void ACC_PlayerController::ActivateAbility(const FGameplayTag& AbilityTag) const
+{
+    // UAbilitySystemBlueprintLibrary 를 사용하면 캐스팅 할 필요 없이 ASC를 가져올 수 있음 (의존성 감소)
+    // 해당 액터가 어떤 클래스인지 몰라도 IAbilitySystemInterface 를 통해 가져올 수 있음
+    //  -> 만약 Pawn이 자동차에 탔을 경우에도 IAbilitySystemInterface를 구현했다면 문제 없이 작동함
+    UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn());
+    if (!IsValid(ASC)) return;
+
+    ASC->TryActivateAbilitiesByTag(AbilityTag.GetSingleTagContainer());
 }
