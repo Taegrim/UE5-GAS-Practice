@@ -1,12 +1,12 @@
 ﻿#include "Crash/Public/Player/CC_PlayerState.h"
 
-#include "AbilitySystemComponent.h"
+#include "AbilitySystem/CC_AbilitySystemComponent.h"
 
 ACC_PlayerState::ACC_PlayerState()
 {
     SetNetUpdateFrequency(100.f);
 
-    AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+    AbilitySystemComponent = CreateDefaultSubobject<UCC_AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
     AbilitySystemComponent->SetIsReplicated(true);
     AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
     // Mixed -> 소유자에겐 자세하게, 다른 클라이언트에겐 최소한만 복제함

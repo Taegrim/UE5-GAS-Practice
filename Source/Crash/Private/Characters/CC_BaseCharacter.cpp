@@ -19,7 +19,7 @@ UAbilitySystemComponent* ACC_BaseCharacter::GetAbilitySystemComponent() const
 
 void ACC_BaseCharacter::GiveStartupAbilities()
 {
-    if (!IsValid(GetAbilitySystemComponent())) return; 
+    if (!IsValid(GetAbilitySystemComponent())) return;
 
     for (const TSubclassOf<UGameplayAbility>& Ability : StartupAbilities)
     {
