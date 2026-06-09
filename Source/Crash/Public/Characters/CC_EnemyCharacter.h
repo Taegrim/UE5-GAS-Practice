@@ -4,6 +4,7 @@
 #include "CC_BaseCharacter.h"
 #include "CC_EnemyCharacter.generated.h"
 
+class UAttributeSet;
 class UCC_AbilitySystemComponent;
 
 UCLASS()
@@ -16,10 +17,15 @@ public:
 
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+    virtual UAttributeSet* GetAttributeSet() const override;
+
 protected:
     virtual void BeginPlay() override;
 
 private:
     UPROPERTY(VisibleAnywhere)
     TObjectPtr<UCC_AbilitySystemComponent> AbilitySystemComponent;
+
+    UPROPERTY()
+    TObjectPtr<UAttributeSet> AttributeSet;
 };

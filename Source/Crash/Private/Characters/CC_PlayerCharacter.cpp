@@ -45,6 +45,14 @@ UAbilitySystemComponent* ACC_PlayerCharacter::GetAbilitySystemComponent() const
     return CCPlayerState->GetAbilitySystemComponent();
 }
 
+UAttributeSet* ACC_PlayerCharacter::GetAttributeSet() const
+{
+    ACC_PlayerState* CCPlayerState = GetPlayerState<ACC_PlayerState>();
+    if (!IsValid(CCPlayerState)) return nullptr;
+
+    return CCPlayerState->GetAttributeSet();
+}
+
 // 폰이 컨트롤러에 Possess될때 '서버'에서 호출됨
 // 이 시점에서 서버는 어빌리티 시스템 컴포넌트를 초기화 함
 void ACC_PlayerCharacter::PossessedBy(AController* NewController)
@@ -54,7 +62,9 @@ void ACC_PlayerCharacter::PossessedBy(AController* NewController)
     if (!IsValid(GetAbilitySystemComponent()) || !HasAuthority()) return;
 
     GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(), this);
+    OnASCInitialized.Broadcast(GetAbilitySystemComponent(), GetAttributeSet());
     GiveStartupAbilities();
+    InitializeAttributes();
 }
 
 // 서버에서 PlayerState가 복제되어 들어올때 '클라이언트'에서 호출됨
@@ -66,4 +76,5 @@ void ACC_PlayerCharacter::OnRep_PlayerState()
     if (!IsValid(GetAbilitySystemComponent())) return;
 
     GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(), this);
+    OnASCInitialized.Broadcast(GetAbilitySystemComponent(), GetAttributeSet());
 }
