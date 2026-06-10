@@ -40,6 +40,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Crash|Attribute")
     void ResetAttribute();
 
+    UFUNCTION(BlueprintImplementableEvent)
+    void RotateToTarget(AActor* RotateTarget);
+
 public:
     // 위젯 초기화 시점에서 ASC가 준비되지 않을 수 있기 때문에 초기화 시점을 알리기 위한 델리게이트
     UPROPERTY(BlueprintAssignable)

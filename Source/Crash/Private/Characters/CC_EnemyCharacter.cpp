@@ -2,6 +2,7 @@
 
 #include "AbilitySystem/CC_AbilitySystemComponent.h"
 #include "AbilitySystem/CC_AttributeSet.h"
+#include "AIController.h"
 
 
 ACC_EnemyCharacter::ACC_EnemyCharacter()
@@ -44,4 +45,14 @@ void ACC_EnemyCharacter::BeginPlay()
 
     // Attribute를 가져와서  HealthAttribute가 변할때 OnHealthChanged 를 바인딩 하기
     GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(CC_AttributeSet->GetHealthAttribute()).AddUObject(this, &ThisClass::OnHealthChanged);
+}
+
+void ACC_EnemyCharacter::HandleDeath()
+{
+    Super::HandleDeath();
+
+    AAIController* AIController = GetController<AAIController>();
+    if (!IsValid(AIController)) return;
+
+    AIController->StopMovement();
 }
