@@ -1,7 +1,12 @@
 #include "Crash/Public/Characters/CC_BaseCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "Net/UnrealNetwork.h"
 
+namespace CrashTags
+{
+    const FName Player = FName("Player");
+}
 
 ACC_BaseCharacter::ACC_BaseCharacter()
 {
@@ -10,6 +15,13 @@ ACC_BaseCharacter::ACC_BaseCharacter()
     // 렌더링 여부와 관계 없이 뼈대는 데디케이트 서버에서 업데이트 됨
     // 애니메이션에서 히트박스를 트리거하면 서버에서 업데이트 됨
     GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
+}
+
+void ACC_BaseCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(ThisClass, bAlive);
 }
 
 UAbilitySystemComponent* ACC_BaseCharacter::GetAbilitySystemComponent() const
@@ -37,10 +49,43 @@ void ACC_BaseCharacter::GiveStartupAbilities()
 
 void ACC_BaseCharacter::InitializeAttributes() const
 {
-    checkf(IsValid(InitializeAttributesEffect), TEXT("Initialize AttributesEffect not set"));
+    ApplyGameplayEffect(InitializeAttributesEffect, 1.f);
+}
+
+void ACC_BaseCharacter::OnHealthChanged(const FOnAttributeChangeData& AttributeChangeData)
+{
+    if (AttributeChangeData.NewValue <= 0.f)
+    {
+        HandleDeath();
+    }
+}
+
+void ACC_BaseCharacter::HandleDeath()
+{
+    bAlive = false;
+
+    if (IsValid(GEngine))
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("%s Died"), *GetName()));
+    }
+}
+
+void ACC_BaseCharacter::ApplyGameplayEffect(const TSubclassOf<UGameplayEffect> GameplayEffect, float Level) const
+{
+    checkf(IsValid(GameplayEffect), TEXT("%s AttributesEffect not set"), *GameplayEffect.Get()->GetName());
 
     FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
-    FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(InitializeAttributesEffect, 1.f, ContextHandle);
+    FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffect, Level, ContextHandle);
 
     GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+}
+
+void ACC_BaseCharacter::HandleRespawn()
+{
+    bAlive = true;
+}
+
+void ACC_BaseCharacter::ResetAttribute()
+{
+    ApplyGameplayEffect(ResetAttributesEffect, 1.f);
 }

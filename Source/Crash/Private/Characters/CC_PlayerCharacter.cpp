@@ -1,6 +1,7 @@
 ﻿#include "Crash/Public/Characters/CC_PlayerCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/CC_AttributeSet.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -65,6 +66,12 @@ void ACC_PlayerCharacter::PossessedBy(AController* NewController)
     OnASCInitialized.Broadcast(GetAbilitySystemComponent(), GetAttributeSet());
     GiveStartupAbilities();
     InitializeAttributes();
+
+    UCC_AttributeSet* CC_AttributeSet = Cast<UCC_AttributeSet>(GetAttributeSet());
+    if (!IsValid(CC_AttributeSet)) return;
+
+    // Attribute를 가져와서  HealthAttribute가 변할때 OnHealthChanged 를 바인딩 하기
+    GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(CC_AttributeSet->GetHealthAttribute()).AddUObject(this, &ThisClass::OnHealthChanged);
 }
 
 // 서버에서 PlayerState가 복제되어 들어올때 '클라이언트'에서 호출됨
@@ -77,4 +84,10 @@ void ACC_PlayerCharacter::OnRep_PlayerState()
 
     GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(), this);
     OnASCInitialized.Broadcast(GetAbilitySystemComponent(), GetAttributeSet());
+
+    UCC_AttributeSet* CC_AttributeSet = Cast<UCC_AttributeSet>(GetAttributeSet());
+    if (!IsValid(CC_AttributeSet)) return;
+
+    // Attribute를 가져와서  HealthAttribute가 변할때 OnHealthChanged 를 바인딩 하기
+    GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(CC_AttributeSet->GetHealthAttribute()).AddUObject(this, &ThisClass::OnHealthChanged);
 }

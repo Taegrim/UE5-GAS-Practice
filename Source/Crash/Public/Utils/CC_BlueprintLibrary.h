@@ -27,4 +27,6 @@ public:
 
     UFUNCTION(BlueprintPure)
     static FName GetHitDirectionName(const EHitDirection HitDirection);
+
+    
 };

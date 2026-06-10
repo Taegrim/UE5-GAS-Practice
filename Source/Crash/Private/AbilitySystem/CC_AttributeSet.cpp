@@ -3,7 +3,9 @@
 
 #include "AbilitySystem/CC_AttributeSet.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
+#include "GameplayTags/CCTags.h"
 #include "Net/UnrealNetwork.h"
 
 void UCC_AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -23,6 +25,23 @@ void UCC_AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 void UCC_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
     Super::PostGameplayEffectExecute(Data);
+
+    // GamePlayEffect 적용시 Attribute가 체력이고 0이하로 떨어지면 죽은것
+    if (Data.EvaluatedData.Attribute == GetHealthAttribute() && GetHealth() <= 0.f)
+    {
+        AActor* Killer = Data.EffectSpec.GetEffectContext().GetInstigator();
+        AActor* DeadActor = Data.Target.GetAvatarActor();
+
+        FGameplayEventData Payload;
+        Payload.Instigator = Killer;
+        Payload.Target = DeadActor;
+
+        UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+            Killer,
+            CCTags::Events::KillScored,
+            Payload
+            );
+    }
 
     if (!bAttributesInitialize)
     {

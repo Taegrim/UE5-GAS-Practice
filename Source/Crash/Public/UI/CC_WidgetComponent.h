@@ -30,13 +30,13 @@ private:
 
     void InitializeAttributeDelegate();
 
-    void BindWidgetToAttributeChanges(UWidget* WidgetObject, const TTuple<FGameplayAttribute, FGameplayAttribute>& Pair) const;
-
     UFUNCTION()
     void OnASCInitialized(UAbilitySystemComponent* ASC, UAttributeSet* AS);
 
     UFUNCTION()
     void BindToAttributeChanges();
+
+    void BindWidgetToAttributeChanges(UWidget* WidgetObject, const TTuple<FGameplayAttribute, FGameplayAttribute>& Pair) const;
 
 private:
     TWeakObjectPtr<ACC_BaseCharacter> CrashCharacter;

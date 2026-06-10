@@ -49,24 +49,6 @@ void UCC_WidgetComponent::InitializeAttributeDelegate()
     }
 }
 
-// Attribute 위젯에 대해서만 Bind 해주는 함수
-void UCC_WidgetComponent::BindWidgetToAttributeChanges(UWidget* WidgetObject,
-    const TTuple<FGameplayAttribute, FGameplayAttribute>& Pair) const
-{
-    UCC_AttributeWidget* AttributeWidget = Cast<UCC_AttributeWidget>(WidgetObject);
-    if (!IsValid(AttributeWidget)) return;  // CC Attribute 위젯에 대해서만 처리함
-    if (!AttributeWidget->MatchesAttributes(Pair)) return;  // 일치하는 Attribute일때만 처리함
-
-    AttributeWidget->OnAttributeChange(Pair, AttributeSet.Get());   // 초기값을 위한 것
-
-    // 게임중에 값이 변경될때 GAS의 델리게이트에 바인딩해서 처리하도록 함
-    // Max값에는 바인딩하지 않음, 최대값이 변하는 게임이면 Pair.Value에도 바인딩 필요함
-    AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Key).AddLambda([this, AttributeWidget, &Pair](const FOnAttributeChangeData& AttributeChangeData)
-    {
-        AttributeWidget->OnAttributeChange(Pair, AttributeSet.Get());
-    });
-}
-
 void UCC_WidgetComponent::OnASCInitialized(UAbilitySystemComponent* ASC, UAttributeSet* AS)
 {
     AbilitySystemComponent = Cast<UCC_AbilitySystemComponent>(ASC);
@@ -92,3 +74,20 @@ void UCC_WidgetComponent::BindToAttributeChanges()
     }
 }
 
+// Attribute 위젯에 대해서만 Bind 해주는 함수
+void UCC_WidgetComponent::BindWidgetToAttributeChanges(UWidget* WidgetObject,
+    const TTuple<FGameplayAttribute, FGameplayAttribute>& Pair) const
+{
+    UCC_AttributeWidget* AttributeWidget = Cast<UCC_AttributeWidget>(WidgetObject);
+    if (!IsValid(AttributeWidget)) return;  // CC Attribute 위젯에 대해서만 처리함
+    if (!AttributeWidget->MatchesAttributes(Pair)) return;  // 일치하는 Attribute일때만 처리함
+
+    AttributeWidget->OnAttributeChange(Pair, AttributeSet.Get());   // 초기값을 위한 것
+
+    // 게임중에 값이 변경될때 GAS의 델리게이트에 바인딩해서 처리하도록 함
+    // Max값에는 바인딩하지 않음, 최대값이 변하는 게임이면 Pair.Value에도 바인딩 필요함
+    AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Key).AddLambda([this, AttributeWidget, &Pair](const FOnAttributeChangeData& AttributeChangeData)
+    {
+        AttributeWidget->OnAttributeChange(Pair, AttributeSet.Get());
+    });
+}

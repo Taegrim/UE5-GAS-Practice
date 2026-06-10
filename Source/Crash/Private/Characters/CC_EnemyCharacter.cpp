@@ -38,4 +38,10 @@ void ACC_EnemyCharacter::BeginPlay()
 
     GiveStartupAbilities();
     InitializeAttributes();
+
+    UCC_AttributeSet* CC_AttributeSet = Cast<UCC_AttributeSet>(GetAttributeSet());
+    if (!IsValid(CC_AttributeSet)) return;
+
+    // Attribute를 가져와서  HealthAttribute가 변할때 OnHealthChanged 를 바인딩 하기
+    GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(CC_AttributeSet->GetHealthAttribute()).AddUObject(this, &ThisClass::OnHealthChanged);
 }

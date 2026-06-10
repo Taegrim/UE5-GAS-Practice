@@ -11,6 +11,8 @@ namespace CCTags
         UE_DEFINE_GAMEPLAY_TAG_COMMENT(Secondary, "CCTags.CCAbilities.Secondary", "Tag for the Secondary Ability")
         UE_DEFINE_GAMEPLAY_TAG_COMMENT(Tertiary, "CCTags.CCAbilities.Tertiary", "Tag for the Tertiary Ability")
 
+        UE_DEFINE_GAMEPLAY_TAG_COMMENT(Death, "CCTags.CCAbilities.Death", "Tag for the Death Ability")
+
         namespace Enemy
         {
             UE_DEFINE_GAMEPLAY_TAG_COMMENT(HitReact, "CCTags.CCAbilities.Enemy.HitReact", "Tag for the Enemy HitReact Ability")
@@ -19,6 +21,8 @@ namespace CCTags
 
     namespace Events
     {
+        UE_DEFINE_GAMEPLAY_TAG_COMMENT(KillScored, "CCTags.Events.KillScored", "Tag for the KillScored Event")
+
         namespace Player
         {
             UE_DEFINE_GAMEPLAY_TAG_COMMENT(Primary, "CCTags.Events.Player.Primary", "Tag for the Primary Gameplay Ability")
@@ -28,5 +32,10 @@ namespace CCTags
         {
             UE_DEFINE_GAMEPLAY_TAG_COMMENT(HitReact, "CCTags.Events.Enemy.HitReact", "Tag for the Enemy HitReact Event")
         }
+    }
+
+    namespace Status
+    {
+        UE_DEFINE_GAMEPLAY_TAG_COMMENT(Death, "CCTags.Status.Death", "Tag for the Death Status")
     }
 }
