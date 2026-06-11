@@ -24,7 +24,7 @@ public:
 
 public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Crash|Damage", meta = (ExposeOnSpawn, ClampMin = "0.0"))
-    float Damage{10.f};
+    float Damage{25.f};
 
 private:
     UPROPERTY(VisibleAnywhere, Category = "Crash|Projectile")
