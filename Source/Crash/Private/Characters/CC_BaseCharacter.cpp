@@ -68,6 +68,7 @@ void ACC_BaseCharacter::HandleDeath()
 void ACC_BaseCharacter::ApplyGameplayEffect(const TSubclassOf<UGameplayEffect> GameplayEffect, float Level) const
 {
     checkf(IsValid(GameplayEffect), TEXT("%s AttributesEffect not set"), *GameplayEffect.Get()->GetName());
+    if (!IsValid(GetAbilitySystemComponent()))return;
 
     FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
     FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffect, Level, ContextHandle);

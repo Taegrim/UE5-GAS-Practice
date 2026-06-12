@@ -43,6 +43,7 @@ private:
 
 #pragma region Ability Override
 
+private:
     UPROPERTY(EditDefaultsOnly, Category = "Crash|Input|Abilities")
     TObjectPtr<UInputAction> PrimaryAction;
 
@@ -60,5 +61,8 @@ private:
     void ActivateAbility(const FGameplayTag& AbilityTag) const;
 
 #pragma endregion
+
+private:
+    bool IsAlive() const;
 
 };

@@ -22,7 +22,7 @@ protected:
     // 현재값 Attribute 와 최대값 Attribute의 쌍을 지정하는 맵
     UPROPERTY(EditAnywhere)
     TMap<FGameplayAttribute, FGameplayAttribute> AttributeMap;
-
+    
 private:
     void InitAbilitySystemData();
 
