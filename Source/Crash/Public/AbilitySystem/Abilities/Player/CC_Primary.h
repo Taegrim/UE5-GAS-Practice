@@ -11,13 +11,7 @@ class CRASH_API UCC_Primary : public UCC_GameplayAbility
 
 public:
     UFUNCTION(BlueprintCallable, Category = "Crash|Abilities")
-    TArray<AActor*> HitBoxOverlapTest();
-
-    UFUNCTION(BlueprintCallable, Category = "Crash|Abilities")
     void SendHitReactEventToActors(const TArray<AActor*>& HitActors);
-
-private:
-    void DrawHitBoxOverlapDebugs(const TArray<FOverlapResult>& OverlapResults, const FVector& HitBoxLocation) const;
 
 private:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Crash|Abilities", meta = (AllowPrivateAccess = true))
