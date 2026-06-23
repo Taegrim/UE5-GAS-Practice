@@ -15,12 +15,12 @@ class CRASH_API UCC_AttributeWidget : public UUserWidget
     GENERATED_BODY()
 
 public:
-    void OnAttributeChange(const TTuple<FGameplayAttribute, FGameplayAttribute>& Pair, UCC_AttributeSet* AttributeSet);
+    void OnAttributeChange(const TTuple<FGameplayAttribute, FGameplayAttribute>& Pair, UCC_AttributeSet* AttributeSet, float OldValue);
 
     bool MatchesAttributes(const TTuple<FGameplayAttribute, FGameplayAttribute>& Pair) const;
 
     UFUNCTION(BlueprintImplementableEvent, meta = (Display_Name = "On Attribute Change"))
-    void BP_OnAttributeChange(float NewValue, float NewMaxValue);
+    void BP_OnAttributeChange(float NewValue, float NewMaxValue, float OldValue);
 
 public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Crash|Attributes")
@@ -29,4 +29,6 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Crash|Attributes")
     FGameplayAttribute MaxAttribute;
 
+    UPROPERTY(BlueprintReadOnly, Category = "Crash|Attributes")
+    TWeakObjectPtr<AActor> AvatarActor;
 };

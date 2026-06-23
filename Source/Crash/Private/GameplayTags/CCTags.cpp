@@ -3,6 +3,8 @@
 
 namespace CCTags
 {
+    UE_DEFINE_GAMEPLAY_TAG_COMMENT(None, "CCTags.None", "None")
+
     namespace SetByCaller
     {
         UE_DEFINE_GAMEPLAY_TAG_COMMENT(Projectile, "CCTags.SetByCaller.Projectile", "Tag for Set by Caller Magnitude for Projectile")

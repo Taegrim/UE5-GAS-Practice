@@ -48,6 +48,9 @@ public:
     UPROPERTY(BlueprintAssignable)
     FASCInitialized OnASCInitialized;
 
+    UPROPERTY(EditAnywhere, Category = "Crash|AI")
+    float SearchRange{1000.f};
+
 protected:
     void GiveStartupAbilities();
 

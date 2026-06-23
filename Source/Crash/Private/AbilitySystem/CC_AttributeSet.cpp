@@ -26,6 +26,15 @@ void UCC_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 {
     Super::PostGameplayEffectExecute(Data);
 
+    if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+    {
+        SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
+    }
+    if (Data.EvaluatedData.Attribute == GetManaAttribute())
+    {
+        SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
+    }
+
     // GamePlayEffect 적용시 Attribute가 체력이고 0이하로 떨어지면 죽은것
     if (Data.EvaluatedData.Attribute == GetHealthAttribute() && GetHealth() <= 0.f)
     {
